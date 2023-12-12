@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class Pdfdata {
     public static void main(String[] args) {
+        System.out.println("hotfix");
         System.out.println(readPdfByPage("d:/workspaceRuli/5331121A.pdf",21,23));
     }
 
