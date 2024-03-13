@@ -83,20 +83,15 @@ public class DemoApplication {
                 rstr  = cell.getStringCellValue();
             }
         }
-
-
         return rstr;
     }
-
-
-
     public static void main(String[] args) throws IOException {
         Logger logger = Logger.getLogger(DemoApplication.class);
         String pathname  = "";
         logger.info("===========start==============");
         try {
 
-            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("d:/workspaceRuli/11月15回数据.xls"));
+            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("d:/workspaceRuli/2月15回数据.xls"));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
             String diff_filename = "d:/workspaceRuli/diff_result_" + dateFormat.format(new Date()) + ".xls";
             copyFileUsingStream(new File("d:/workspaceRuli/diff_template.xls"), new File(diff_filename));
@@ -120,14 +115,14 @@ public class DemoApplication {
                 String filename = SearchFile(sheetnamearg[0]);
 
                 if ("".equals(filename)) {
-                    logger.debug("没有找到对应的文件");
+                    logger.debug("没有找到对应的文件：*************************************************");
                     continue;
                 }
                 logger.info("对应的文件是 " + filename);
                 POIFSFileSystem fs1 = new POIFSFileSystem(new FileInputStream("d:/workspaceRuli/" + filename));
                 HSSFWorkbook workbooksrc1 = new HSSFWorkbook(fs1);
                 HSSFSheet datasheet = workbooksrc1.getSheetAt(Integer.parseInt(sheetnamearg[1]));
-                logger.info(sheetname + ": 行数一致抽取：" + (workbooksrc.getSheetAt(i).getLastRowNum() + 1) + " 录入：" + (datasheet.getLastRowNum() - 5));
+                // logger.info(sheetname + ": 行数一致抽取：" + (workbooksrc.getSheetAt(i).getLastRowNum() + 1) + " 录入：" + (datasheet.getLastRowNum() - 5));
                 //sheettarg.getRow(starttarget).getCell(12).setCellValue(sheetname + ": 行数一致抽取：" + (workbooksrc.getSheetAt(i).getLastRowNum() + 1) + " 录入：" + (datasheet.getLastRowNum() - 5));
                 int srccount = 0;
                 for (Row row : workbooksrc.getSheetAt(i)) {
@@ -138,7 +133,7 @@ public class DemoApplication {
                 }
                 sheettarg.getRow(starttarget).getCell(12).setCellValue(sheetname + ": 行数一致抽取：" + srccount + " 录入：" + (datasheet.getLastRowNum() - 5));
                 if (srccount != datasheet.getLastRowNum() - 5) {
-                    logger.info(sheetname + ": 行数不一致抽取：" + srccount + " 录入：" + (datasheet.getLastRowNum() - 5));
+                    logger.info(sheetname + ": ********行数不一致抽取*******：" + srccount + " 录入：" + (datasheet.getLastRowNum() - 5));
                     sheettarg.getRow(starttarget).getCell(13).setCellValue(sheetname + ": 行数不一致抽取：" +srccount + " 录入：" + (datasheet.getLastRowNum() - 5));
          /*           starttarget++;
                     target1++;*/
@@ -156,15 +151,12 @@ public class DemoApplication {
                                 value = getCellValues(row.getCell(j));
 //                                logger.info(value);
                             }
-
                             HSSFColor  black = (HSSFColor) row.getCell(j).getCellStyle().getFillForegroundColorColor();
                             //logger.info(black.getIndex());
                             if(black.getIndex()!=64 && black.getIndex()!=9){
                                 cell1Style.setFillForegroundColor(black.getIndex());
                                 sheettarg.getRow(starttarget).getCell(j).setCellStyle(cell1Style);
                             }
-
-
                         }
                         //System.out.println(starttarget);
                         sheettarg.getRow(starttarget).getCell(j).setCellValue(value);
