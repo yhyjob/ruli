@@ -130,6 +130,8 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                 count = sheetparam.getRow(2).getCell(1).getStringCellValue();
             }
 
+
+
             HSSFSheet sheettarg = workbooktarget.getSheetAt(1);
             Scanner scanner = new Scanner(contents);
             scanner.useDelimiter("\n");
@@ -177,7 +179,7 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                         if (delcol != null) {
                             String[] delcolarg = delcol.split(",");
                             for (int i = 0; i < delcolarg.length; i++) {
-                                ranks.remove(Integer.parseInt(delcolarg[i]) - 2);
+                                ranks.remove(Integer.parseInt(delcolarg[i]) - (2+i));
                             }
                             int count1 = Collections.frequency(ranks, "－");
                             if (count1 == Integer.parseInt(colcount) -delcolarg.length- 1 || ranks.size()<Integer.parseInt(colcount)-delcolarg.length-1) {
@@ -200,14 +202,18 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                     }
                     rownum.incrementAndGet();
                 }
-
             }
-
 
             fout = new FileOutputStream(diff_filename);
             workbooktarget.write(fout);
             System.out.println("rownum =" + rownum.intValue());
 
+//            if (!"".equals(sheetparam.getRow(2).getCell(1).getStringCellValue())) {
+//                if(Integer.parseInt(count)!= rownum.intValue()){
+//                    System.out.println("=========行数不一致========");
+//                        System.exit(0);
+//                }
+//            }
         } catch (
                 Exception e) {
             e.printStackTrace();

@@ -16,6 +16,7 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class DemoApplication {
 
@@ -87,11 +88,12 @@ public class DemoApplication {
     }
     public static void main(String[] args) throws IOException {
         Logger logger = Logger.getLogger(DemoApplication.class);
-        String pathname  = "";
-        logger.info("===========start==============");
+         Scanner sc = new Scanner(System.in);
+        System.out.println(" Please Enter  Filename:");
+        String datafilename = sc.nextLine();  // 读取字符串型输入
+        logger.info("===========start=============="+datafilename);
         try {
-
-            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("d:/workspaceRuli/3月2回数据.xls"));
+            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream("d:/workspaceRuli/"+datafilename));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
             String diff_filename = "d:/workspaceRuli/diff_result_" + dateFormat.format(new Date()) + ".xls";
             copyFileUsingStream(new File("d:/workspaceRuli/diff_template.xls"), new File(diff_filename));

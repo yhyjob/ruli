@@ -11,7 +11,7 @@ public class TxttoExcel {
     public static void main(String[] args) throws IOException {
 
         String data_filename = "d:/workspaceRuli/pdfdata.txt";
-        String diff_filename = "d:/workspaceRuli/target_result.xls";
+        String diff_filename = "d:/workspaceRuli/target_result1.xls";
         POIFSFileSystem fstarget = new POIFSFileSystem(new FileInputStream(diff_filename));
         HSSFWorkbook workbooktarget = new HSSFWorkbook(fstarget);
         HSSFSheet sheettarg = workbooktarget.getSheetAt(0);
@@ -20,16 +20,16 @@ public class TxttoExcel {
             int rownum = 0;
             while ((line = br.readLine()) != null) {
 
-
-                String  str = line; //
+                String  str = line.substring(line.indexOf("|")); //
+                System.out.println(str);
                 String tempstr = str.replace(", ",",");
-                String []  strarg= tempstr.split("\t");
-                System.out.println(strarg[0]);
-                sheettarg.getRow(rownum).getCell(0).setCellValue(strarg[0].trim());
-                System.out.println(strarg[1]);
-                String [] numarg = strarg[1].split("\\s{2,}");
-                System.out.println(numarg[0]);
-                for (int i = 1; i <numarg.length ; i++) {
+                String []  numarg= tempstr.split("\\s{2,}");
+//                System.out.println(strarg[0]);
+//                sheettarg.getRow(rownum).getCell(0).setCellValue(strarg[0].trim());
+//                System.out.println(strarg[1]);
+//                String [] numarg = strarg[1].split("\\s{2,}");
+//                System.out.println(numarg[0]);
+                for (int i = 0; i <numarg.length ; i++) {
                     System.out.println(numarg[i] +" length ="+numarg[i].length());
                     sheettarg.getRow(rownum).getCell(i).setCellValue(numarg[i].trim());;
 
