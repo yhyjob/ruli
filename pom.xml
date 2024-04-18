@@ -14,17 +14,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
+
         <repository>
-             <id>mvnrepository</id>
-            <name>mvnrepository</name>
-            <url>http://www.mvnrepository.com/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
@@ -32,6 +26,16 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
             <version>4.1.2</version>
         </dependency>
         <dependency>
@@ -46,6 +50,11 @@
             <version>5.5.11</version>
         </dependency>
 
+            <dependency>
+                <groupId>e-iceblue</groupId>
+                <artifactId>spire.pdf</artifactId>
+                <version>9.6.2</version>
+            </dependency>
 
     </dependencies>
 
@@ -70,7 +79,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.example.demo.DemoApplication</mainClass> <!-- 指定入口类路径 -->
+                            <mainClass>com.example.demo.CompanySearch</mainClass> <!-- 指定入口类路径 -->
                         </manifest>
                     </archive>
                     <descriptorRefs>

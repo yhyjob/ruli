@@ -130,48 +130,90 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                 count = sheetparam.getRow(2).getCell(1).getStringCellValue();
             }
 
-
-
             HSSFSheet sheettarg = workbooktarget.getSheetAt(1);
             Scanner scanner = new Scanner(contents);
             scanner.useDelimiter("\n");
             String rows_name = "";
             while (scanner.hasNext()) {
                 if (contents.contains("\t")) {
-                    String[] ranks = scanner.next().split("\t");
-                    for (int i = 0; i < ranks.length; i++) {
-                        System.out.println(ranks[i].trim());
-                        sheettarg.getRow(rownum.intValue()).getCell(i).setCellValue(ranks[i].trim());
+                    String[] rankarg = scanner.next().split("\t");
+                    ArrayList<String> ranks = new ArrayList<>(Arrays.asList(rankarg));
+                    if (ranks.size() < Integer.parseInt(colcount)) {
+                        continue;
+                    }
+                    if (delcol != null) {
+                        String[] delcolarg = delcol.split(",");
+                        for (int i = 0; i < delcolarg.length; i++) {
+                            ranks.remove(Integer.parseInt(delcolarg[i]) - 1 - i);
+                        }
+                        int count1 = 0;
+                        if (ranks.contains("-")) {
+                            count1 = Collections.frequency(ranks, "-");
+                        }
+                        if (ranks.contains("—")) {
+                            count1 = Collections.frequency(ranks, "—");
+                        }
+                        if (ranks.contains("―")) {
+                            count1 = Collections.frequency(ranks, "―");
+                        }
+//                        if(isTitle(ranks)){
+//                            continue;
+//                        }
+                        if (count1 == Integer.parseInt(colcount) - delcolarg.length - 1 || ranks.size() < Integer.parseInt(colcount) - delcolarg.length - 1) {
+                            continue;
+                        }
+                    }
+                    for (int i = 0; i < ranks.size(); i++) {
+                        System.out.println(ranks.get(i).trim());
+                        sheettarg.getRow(rownum.intValue()).getCell(i).setCellValue(ranks.get(i).trim());
                     }
                     rownum.incrementAndGet();
                 } else {
                     String row = scanner.next();
+                    if (row.contains("小計")) {
+                        continue;
+                    }
                     int numindex = indexOfFirstDigit(row);
                     if (numindex == -1) {
-                        rows_name += row;
+//                        if(!row.contains(" ")&&!row.contains("\\r\\n")){
+//                           // rows_name += row;
+//                        }
                         continue;
                     }
                     if (numindex != -1) {
                         String name = "";
                         String num = "";
-                        if(row.split(" ").length == Integer.parseInt(colcount)){
-                             name = row.split(" ")[0];
-                             num = row.substring(row.indexOf(" ")+1);
-                        }else {
+                        if (row.split(" ").length == Integer.parseInt(colcount)) {
+                            name = row.split(" ")[0];
+                            num = row.substring(row.indexOf(" ") + 1);
+                        } else {
                             if (row.contains("－") && numindex > row.indexOf("－")) {
                                 numindex = row.indexOf("－");
                             }
-                             name = row.substring(0, numindex);
-                             num = row.substring(numindex);
+                            if (row.contains("—") && numindex > row.indexOf("—")) {
+                                numindex = row.indexOf("—");
+                            }
+                            if (row.contains("―") && numindex > row.indexOf("―")) {
+                                numindex = row.indexOf("―");
+                            }
+                            if (row.contains("－") && numindex > row.indexOf("－")) {
+                                numindex = row.indexOf("－");
+                            }
+                            name = row.substring(0, numindex);
+                            num = row.substring(numindex);
                         }
-
-
-
                         if (!rows_name.equals("")) {
                             name = rows_name + name;
                         }
+                        /*String[] ranksfirst = num.replace(", ",",")
+                                .replace(". ",".")
+                                .split(" ");*/
                         String[] ranksfirst = num.split(" ");
                         ArrayList<String> ranks = new ArrayList<>(Arrays.asList(ranksfirst));
+
+                        if (ranks.size() < Integer.parseInt(colcount) - 1) {
+                            continue;
+                        }
 
                         rows_name = "";
                         System.out.println(name);
@@ -179,10 +221,25 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                         if (delcol != null) {
                             String[] delcolarg = delcol.split(",");
                             for (int i = 0; i < delcolarg.length; i++) {
-                                ranks.remove(Integer.parseInt(delcolarg[i]) - (2+i));
+                                ranks.remove(Integer.parseInt(delcolarg[i]) - (2 + i));
                             }
-                            int count1 = Collections.frequency(ranks, "－");
-                            if (count1 == Integer.parseInt(colcount) -delcolarg.length- 1 || ranks.size()<Integer.parseInt(colcount)-delcolarg.length-1) {
+                            int count1 = 0;
+                            if (ranks.contains("-")) {
+                                count1 = Collections.frequency(ranks, "-");
+                            }
+                            if (ranks.contains("—")) {
+                                count1 = Collections.frequency(ranks, "—");
+                            }
+                            if (ranks.contains("―")) {
+                                count1 = Collections.frequency(ranks, "―");
+                            }
+                            if (ranks.contains("－")) {
+                                count1 = Collections.frequency(ranks, "－");
+                            }
+//                            if(isTitle(ranks)){
+//                                continue;
+//                            }
+                            if (count1 == Integer.parseInt(colcount) - delcolarg.length - 1 || ranks.size() < Integer.parseInt(colcount) - delcolarg.length - 1) {
                                 continue;
                             }
                         }
@@ -214,8 +271,7 @@ class ClipboardListener extends Thread implements ClipboardOwner {
 //                        System.exit(0);
 //                }
 //            }
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
         } finally {
@@ -242,6 +298,19 @@ class ClipboardListener extends Thread implements ClipboardOwner {
     private static boolean isNumeric(String str) {
         try {
             Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static boolean isTitle(ArrayList list) {
+        try {
+            for (int i = 1; i < list.size(); i++) {
+                if (list.get(i).toString() != "") {
+                    return false;
+                }
+            }
             return true;
         } catch (NumberFormatException e) {
             return false;
