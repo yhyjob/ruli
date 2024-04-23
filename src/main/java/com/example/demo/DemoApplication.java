@@ -158,6 +158,7 @@ public class DemoApplication {
                             if(black.getIndex()!=64 && black.getIndex()!=9){
                                 cell1Style.setFillForegroundColor(black.getIndex());
                                 sheettarg.getRow(starttarget).getCell(j).setCellStyle(cell1Style);
+                                sheettarg.getRow(starttarget).getCell(13).setCellValue(getCellValues(row.getCell(4)));
                             }
                         }
                        // System.out.println(starttarget);

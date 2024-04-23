@@ -1,12 +1,10 @@
 package com.example.demo;
-
 import com.spire.pdf.PdfDocument;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.PageRanges;
@@ -17,9 +15,8 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class PrintInDuplexMode {
+public class BatchPrint {
 
     public static void main(String[] args) throws IOException, PrinterException {
         String path = "D:\\workspaceRuli\\2回目作業分";
@@ -113,7 +110,7 @@ public class PrintInDuplexMode {
                 //System.out.println(rowNum);
                 XSSFRow hssfRow = sheet.getRow(rowNum);
                 Cell packnumcek = hssfRow.getCell(0);
-                if(packnumcek == null || "".equals(getCellValue(packnumcek))) break;
+                if (packnumcek == null || "".equals(getCellValue(packnumcek))) break;
                 Cell fundidcel = hssfRow.getCell(5);
                 Cell pageno = hssfRow.getCell(9);
                 Cell pagea = hssfRow.getCell(15);
@@ -127,56 +124,47 @@ public class PrintInDuplexMode {
                     if (printfundid.equals("")) {
                         printfundid = getCellValue(fundidcel);
                         filenamepdf = SearchFile(printfundid);
-                        pdf.loadFromFile(path + "\\"+filenamepdf);
+                        pdf.loadFromFile(path + "\\" + filenamepdf);
                     }
 
                     String range = getCellValue(pageno);
-                    if(!"".equals(range)) {
+                    if (!"".equals(range)) {
                         if (range.contains(",")) {
                             String[] rangs = range.split(",");
-                            pagenolist.add(new PageRanges(Integer.parseInt(rangs[0].trim())+1, Integer.parseInt(rangs[1].trim())+1));
-                            System.out.println("开始打印包数:"+packno+"ID:"+printfundid + "的第" + pageno);
+                            pagenolist.add(new PageRanges(Integer.parseInt(rangs[0].trim()) + 1, Integer.parseInt(rangs[1].trim()) + 1));
+                            System.out.println("开始打印第" + packno + "包ID为:" + printfundid + "的第" + pageno + "页");
                             //printerJob.print(pagenolist);
                         } else if (range.contains("-")) {
                             String[] rangs = range.split("-");
-                            pagenolist.add(new PageRanges(Integer.parseInt(rangs[0].trim())+1, Integer.parseInt(rangs[1].trim())+1));
-                            System.out.println("开始打印包数:"+packno+"ID:"+printfundid + "的第" + pageno);
+                            pagenolist.add(new PageRanges(Integer.parseInt(rangs[0].trim()) + 1, Integer.parseInt(rangs[1].trim()) + 1));
+                            System.out.println("开始打印第" + packno + "包ID为:" + printfundid + "的第" + pageno + "页");
                             //printerJob.print(pagenolist);
                         } else {
-                            pagenolist.add(new PageRanges(Integer.parseInt(range.trim())+1));
-                            System.out.println("开始打印包数:"+packno+"ID:"+printfundid + "的第" + pageno);
+                            pagenolist.add(new PageRanges(Integer.parseInt(range.trim()) + 1));
+                            System.out.println("开始打印第" + packno + "包ID为:" + printfundid + "的第" + pageno + "页");
                             //printerJob.print(pagenolist);
                         }
                     }
 
-                    if(getCellValue(pagea).contains("P") && !"COPY".equals(getCellValue(pagea))){
+                    if (getCellValue(pagea).contains("P") && !"COPY".equals(getCellValue(pagea))) {
                         String rangea = getCellValue(pagea).trim().substring(1);
-                        pagenolist.add( new PageRanges(Integer.parseInt(rangea.trim())+1));
-                        System.out.println("开始打印包数:"+packno+"ID:"+printfundid + "保有口数的第" + rangea);
+                        pagenolist.add(new PageRanges(Integer.parseInt(rangea.trim()) + 1));
+                        System.out.println("开始打印第" + packno + "包ID为:" + printfundid + "保有口数的第" + rangea+ "页");
                         //printerJob.print(pagenolist);
                     }
-                    if(getCellValue(pageb).contains("P") && !"COPY".equals(getCellValue(pageb))){
+                    if (getCellValue(pageb).contains("P") && !"COPY".equals(getCellValue(pageb))) {
                         String rangeb = getCellValue(pageb).trim().substring(1);
-                        pagenolist.add( new PageRanges(Integer.parseInt(rangeb.trim())+1));
-                        System.out.println("开始打印包数:"+packno+"ID:"+printfundid + "全体口数的第" + rangeb);
+                        pagenolist.add(new PageRanges(Integer.parseInt(rangeb.trim()) + 1));
+                        System.out.println("开始打印第" + packno + "包ID为:" + printfundid + "全体口数的第" + rangeb+ "页");
                         //printerJob.print(pagenolist);
                     }
-
-                   // String packnum = getCellValue(packnumcek);
-
-                  //  break;
 
                 }
             }
 
 
         }
-
-
         //Create a PrintRequestAttributed object
-
-
-
         return path;
     }
 

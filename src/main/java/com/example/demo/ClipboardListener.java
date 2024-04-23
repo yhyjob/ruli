@@ -1,8 +1,13 @@
 package com.example.demo;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -29,6 +34,7 @@ class ClipboardListener extends Thread implements ClipboardOwner {
     }
 
     AtomicInteger rownum = new AtomicInteger(0);
+    AtomicInteger pagenum = new AtomicInteger(0);
 
     public void run() {
         sysClip.setContents(sysClip.getContents(this), this);
@@ -125,15 +131,20 @@ class ClipboardListener extends Thread implements ClipboardOwner {
             if (!"".equals(sheetparam.getRow(1).getCell(1).getStringCellValue())) {
                 delcol = sheetparam.getRow(1).getCell(1).getStringCellValue();
             }
-            String count = null;
+            String pagecol = "1";
             if (!"".equals(sheetparam.getRow(2).getCell(1).getStringCellValue())) {
-                count = sheetparam.getRow(2).getCell(1).getStringCellValue();
+                pagecol = sheetparam.getRow(2).getCell(1).getStringCellValue();
+            }
+            String startpage = "1";
+            if (!"".equals(sheetparam.getRow(3).getCell(1).getStringCellValue())) {
+                startpage = sheetparam.getRow(3).getCell(1).getStringCellValue();
             }
 
             HSSFSheet sheettarg = workbooktarget.getSheetAt(1);
             Scanner scanner = new Scanner(contents);
             scanner.useDelimiter("\n");
             String rows_name = "";
+            pagenum.incrementAndGet();
             while (scanner.hasNext()) {
                 if (contents.contains("\t")) {
                     String[] rankarg = scanner.next().split("\t");
@@ -259,6 +270,17 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                     }
                     rownum.incrementAndGet();
                 }
+            }
+
+            if(pagenum.intValue()!=0 && pagenum.intValue()%(2*Integer.parseInt(pagecol)) == 0){
+                HSSFCellStyle cell1Style = workbooktarget.createCellStyle();
+                cell1Style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                cell1Style.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+                sheettarg.getRow(rownum.intValue()-1).getCell(0).setCellStyle(cell1Style);
+                sheettarg.getRow(rownum.intValue()-1).getCell(1).setCellStyle(cell1Style);
+                sheettarg.getRow(rownum.intValue()-1).getCell(2).setCellStyle(cell1Style);
+                sheettarg.getRow(rownum.intValue()-1).getCell(3).setCellStyle(cell1Style);
+                sheettarg.getRow(rownum.intValue()-1).getCell(5).setCellValue(Integer.parseInt(startpage)+pagenum.intValue()/(2*Integer.parseInt(pagecol)));
             }
 
             fout = new FileOutputStream(diff_filename);
