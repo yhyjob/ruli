@@ -280,7 +280,7 @@ class ClipboardListener extends Thread implements ClipboardOwner {
                 sheettarg.getRow(rownum.intValue()-1).getCell(1).setCellStyle(cell1Style);
                 sheettarg.getRow(rownum.intValue()-1).getCell(2).setCellStyle(cell1Style);
                 sheettarg.getRow(rownum.intValue()-1).getCell(3).setCellStyle(cell1Style);
-                sheettarg.getRow(rownum.intValue()-1).getCell(5).setCellValue(Integer.parseInt(startpage)+pagenum.intValue()/(2*Integer.parseInt(pagecol)));
+                sheettarg.getRow(rownum.intValue()-1).getCell(4).setCellValue(Integer.parseInt(startpage)+pagenum.intValue()/(2*Integer.parseInt(pagecol)));
             }
 
             fout = new FileOutputStream(diff_filename);
