@@ -3,7 +3,14 @@ package com.example.demo;
 public class CopyInfo {
 
     private String packnumcek = "";
+    private String juesuanqi = "";
+
+    private String juesuanyue = "";
+    private String juesuanri = "";
+
     private String fundid = "";
+
+    private String fundname = "";
     private String ruliobject = "";
     private String pageno;
     private String descsheetname = "";
@@ -14,9 +21,28 @@ public class CopyInfo {
     private String quanti = "";
     private int beginrow = 0;
     private int endrow = 0;
-    private final int sheetindex = 0;
-    private final int titleAtColindex = 0;
+
+    public void setSheetindex(int sheetindex) {
+        this.sheetindex = sheetindex;
+    }
+
+    public void setTitleAtColindex(int titleAtColindex) {
+        this.titleAtColindex = titleAtColindex;
+    }
+
+    private  int sheetindex = 0;
+    private  int titleAtColindex = 0;
     private int realcopycount = 0;
+
+    public Boolean getIsinsert() {
+        return isinsert;
+    }
+
+    public void setIsinsert(Boolean isinsert) {
+        this.isinsert = isinsert;
+    }
+
+    private  Boolean isinsert = false;
 
     public int getSheetindex() {
         int intdex = 0;
@@ -26,6 +52,11 @@ public class CopyInfo {
             intdex = Integer.parseInt(descsheetname.substring(0, 2));
         }
         return intdex;
+    }
+
+    public int getSheetindexCheck() {
+
+        return sheetindex;
     }
 
     public int getTitleAtColindex() {
@@ -57,12 +88,44 @@ public class CopyInfo {
         this.packnumcek = packnumcek;
     }
 
+    public String getJuesuanqi() {
+        return juesuanqi;
+    }
+
+    public void setJuesuanqi(String juesuanqi) {
+        this.juesuanqi = juesuanqi;
+    }
+
+    public String getJuesuanyue() {
+        return juesuanyue;
+    }
+
+    public void setJuesuanyue(String juesuanyue) {
+        this.juesuanyue = juesuanyue;
+    }
+
+    public String getJuesuanri() {
+        return juesuanri;
+    }
+
+    public void setJuesuanri(String juesuanri) {
+        this.juesuanri = juesuanri;
+    }
     public String getFundid() {
         return fundid;
     }
 
     public void setFundid(String fundid) {
         this.fundid = fundid;
+    }
+
+
+    public String getFundname() {
+        return fundname;
+    }
+
+    public void setFundname(String fundname) {
+        this.fundname = fundname;
     }
 
     public String getRuliobject() {
@@ -118,7 +181,10 @@ public class CopyInfo {
         return "CopyInfo{" +
                 "packnumcek='" + packnumcek + '\'' +
                 ", fundid='" + fundid + '\'' +
+                ", isinsert='" + isinsert + '\'' +
                 ", pageno='" + pageno + '\'' +
+                ", ruliobject='" + ruliobject + '\'' +
+                ", sheetindex='" + sheetindex + '\'' +
                 ", descsheetname='" + descsheetname + '\'' +
                 ", copycount='" + copycount + '\'' +
                 ", fundtitle='" + fundtitle + '\'' +
@@ -149,6 +215,8 @@ public class CopyInfo {
     public boolean isCopy() {
         return this.pageno.equals("COPY");
     }
+
+
 
     public boolean isByCopy() {
         return this.baoyou.equals("COPY");
@@ -185,4 +253,14 @@ public class CopyInfo {
     public void setRealcopycount(int realcopycount) {
         this.realcopycount = realcopycount;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        CopyInfo copyinfo = (CopyInfo) obj;
+        return fundid == copyinfo.getFundid() &&  sheetindex == copyinfo.getSheetindex();
+    }
+
+
 }
